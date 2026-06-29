@@ -12,4 +12,3 @@ gleeunit = ">= 1.0.0 and < 2.0.0"
 
 [tools.gleepack]
 output = "dist/distgleam"
-targets = ["aarch64-macos-otp-29.0", "amd64-linux-otp-29.0"]
