@@ -42,7 +42,7 @@ jobs:
         run: gleam test
 
       - name: Build with gleepack
-        run: gleepack build --target "${{ matrix.target }}" --output "dist/${{ matrix.asset-name }}"
+        run: gleepack build --target="${{ matrix.target }}" --output="dist/${{ matrix.asset-name }}"
 
       - name: Publish GitHub Release
         uses: softprops/action-gh-release@v2
