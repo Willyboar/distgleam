@@ -28,8 +28,17 @@ jobs:
       - name: Stage release artifacts
         run: |
           mkdir -p dist
-          cp dist/distgleam/aarch64-macos-otp-29.0.2/distgleam dist/distgleam-aarch64-macos 2>/dev/null || true
-          cp dist/distgleam/amd64-linux-otp-29.0.2/distgleam dist/distgleam-amd64-linux 2>/dev/null || true
+          for target_dir in dist/distgleam/*/; do
+            slug=$(basename "$target_dir")
+            case "$slug" in
+              aarch64-macos*)  asset="distgleam-aarch64-macos"  ;;
+              amd64-linux*)    asset="distgleam-amd64-linux"    ;;
+              aarch64-linux*)  asset="distgleam-aarch64-linux"  ;;
+              amd64-win32*)    asset="distgleam-amd64-win32"    ;;
+              *)               asset="distgleam-$slug"          ;;
+            esac
+            cp "$target_dir/distgleam" "dist/$asset" 2>/dev/null || true
+          done
 
       - name: Publish GitHub Release
         uses: softprops/action-gh-release@v2

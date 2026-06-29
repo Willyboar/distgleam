@@ -13,4 +13,9 @@ gleepack = { git = "https://github.com/yoshi-monster/gleepack.git", ref = "main"
 
 [tools.gleepack]
 output = "dist/distgleam"
-targets = ["aarch64-macos-otp-29.0.2", "amd64-linux-otp-29.0.2"]
+targets = [
+  "aarch64-macos-otp-29.0.2",
+  "amd64-linux-otp-29.0.2",
+  "aarch64-linux-otp-29.0.2",
+  "amd64-win32-otp-29.0.2",
+]
