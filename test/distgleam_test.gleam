@@ -1,5 +1,5 @@
-import gleeunit
 import distgleam
+import gleeunit
 
 pub fn main() -> Nil {
   gleeunit.main()
