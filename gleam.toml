@@ -9,6 +9,8 @@ gleam_stdlib = ">= 1.0.0 and < 2.0.0"
 
 [dev_dependencies]
 gleeunit = ">= 1.0.0 and < 2.0.0"
+gleepack = { git = "https://github.com/yoshi-monster/gleepack.git", ref = "main" }
 
 [tools.gleepack]
 output = "dist/distgleam"
+targets = ["aarch64-macos-otp-29.0.2", "amd64-linux-otp-29.0.2"]

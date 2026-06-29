@@ -19,18 +19,17 @@ jobs:
           gleam-version: "1.17.0"
           rebar3-version: "3"
 
-      - name: Install gleepack
-        run: |
-          curl -sL -o /tmp/gleepack.zip https://github.com/yoshi-monster/gleepack/releases/download/v1.0.1/aarch64-macos-otp-29.0.zip
-          unzip -o /tmp/gleepack.zip -d /tmp/gleepack
-          chmod +x /tmp/gleepack/gleepack
-          sudo mv /tmp/gleepack/gleepack /usr/local/bin/gleepack
-
       - name: Run tests
         run: gleam test
 
-      - name: Build for macOS ARM64
-        run: gleepack build --target="aarch64-macos-otp-29.0" --output="dist/distgleam-aarch64-macos"
+      - name: Build with gleepack
+        run: gleam run -m gleepack build
+
+      - name: Stage release artifacts
+        run: |
+          mkdir -p dist
+          cp dist/distgleam/aarch64-macos-otp-29.0.2/distgleam dist/distgleam-aarch64-macos 2>/dev/null || true
+          cp dist/distgleam/amd64-linux-otp-29.0.2/distgleam dist/distgleam-amd64-linux 2>/dev/null || true
 
       - name: Publish GitHub Release
         uses: softprops/action-gh-release@v2
