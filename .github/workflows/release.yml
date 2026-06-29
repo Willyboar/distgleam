@@ -22,6 +22,18 @@ jobs:
       - name: Run tests
         run: gleam test
 
+      - name: Pre-download gleepack runtimes
+        run: |
+          mkdir -p ~/.cache/gleepack/runtimes
+          for url in \
+            https://github.com/yoshi-monster/gleepack/releases/download/OTP-29.0.2/aarch64-macos-otp-29.0.2.zip \
+            https://github.com/yoshi-monster/gleepack/releases/download/OTP-29.0.2/amd64-linux-otp-29.0.2.zip \
+            https://github.com/yoshi-monster/gleepack/releases/download/OTP-29.0.2/aarch64-linux-otp-29.0.2.zip \
+            https://github.com/yoshi-monster/gleepack/releases/download/OTP-29.0.2/amd64-win32-otp-29.0.2.zip; do
+            name="${url##*/}"
+            [ -f ~/.cache/gleepack/runtimes/"$name" ] || curl -sL -o ~/.cache/gleepack/runtimes/"$name" "$url"
+          done
+
       - name: Build with gleepack
         run: gleam run -m gleepack build
 

@@ -9,7 +9,7 @@ gleam_stdlib = ">= 1.0.0 and < 2.0.0"
 
 [dev_dependencies]
 gleeunit = ">= 1.0.0 and < 2.0.0"
-gleepack = { git = "https://github.com/yoshi-monster/gleepack.git", ref = "main" }
+gleepack = { git = "https://github.com/yoshi-monster/gleepack.git", ref = "994b34295737301b197b1db68c93176c28626a43" }
 
 [tools.gleepack]
 output = "dist/distgleam"
