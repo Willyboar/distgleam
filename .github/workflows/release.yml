@@ -1,0 +1,51 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*"
+
+jobs:
+  release:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-latest
+            target: amd64-linux-otp-29.0
+            gleepack-url: https://github.com/yoshi-monster/gleepack/releases/download/v1.0.1/gleepack-amd64-linux-otp-29.0
+            asset-name: distgleam-amd64-linux
+          - os: macos-latest
+            target: aarch64-macos-otp-29.0
+            gleepack-url: https://github.com/yoshi-monster/gleepack/releases/download/v1.0.1/gleepack-aarch64-macos-otp-29.0
+            asset-name: distgleam-aarch64-macos
+    runs-on: ${{ matrix.os }}
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: erlef/setup-beam@v1
+        with:
+          otp-version: "29.0"
+
+      - uses: gleam-lang/setup-gleam@v1
+        with:
+          version: "1.16.0"
+
+      - name: Install gleepack
+        run: |
+          curl -sL -o /tmp/gleepack "${{ matrix.gleepack-url }}"
+          chmod +x /tmp/gleepack
+          sudo mv /tmp/gleepack /usr/local/bin/gleepack
+
+      - name: Run tests
+        run: gleam test
+
+      - name: Build with gleepack
+        run: gleepack build --target "${{ matrix.target }}" --output "dist/${{ matrix.asset-name }}"
+
+      - name: Publish GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: dist/*

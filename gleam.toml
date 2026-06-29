@@ -1,0 +1,15 @@
+name = "distgleam"
+version = "1.0.0"
+description = "A minimal Gleam app packaged with gleepack"
+licences = ["MIT"]
+repository = { type = "github", user = "Willyboar", repo = "distgleam" }
+
+[dependencies]
+gleam_stdlib = ">= 1.0.0 and < 2.0.0"
+
+[dev_dependencies]
+gleeunit = ">= 1.0.0 and < 2.0.0"
+
+[tools.gleepack]
+output = "dist/distgleam"
+targets = ["aarch64-macos-otp-29.0", "amd64-linux-otp-29.0"]
