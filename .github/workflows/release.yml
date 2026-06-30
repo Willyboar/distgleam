@@ -26,24 +26,7 @@ jobs:
         run: gleam deps download
 
       - name: Patch gleepack for CI auth
-        run: |
-          TARGET=build/packages/gleepack/src/gleepack/target.gleam
-          # Add envoy import after snag import
-          awk '/import snag/{print; print "import envoy"; next}1' "$TARGET" > "$TARGET.tmp" && mv "$TARGET.tmp" "$TARGET"
-          # Add GITHUB_TOKEN auth in gh_get function
-          python3 << 'PATCHGLEE'
-import re
-target = "build/packages/gleepack/src/gleepack/target.gleam"
-with open(target) as f:
-    c = f.read()
-c = c.replace(
-    '  let req = request.set_header(req, "accept", "application/vnd.github+json")\n  use response <- result.try(',
-    '  let req = request.set_header(req, "accept", "application/vnd.github+json")\n  let req = case envoy.get("GITHUB_TOKEN") {\n    Ok(token) -> request.set_header(req, "authorization", "Bearer " <> token)\n    _ -> req\n  }\n  use response <- result.try('
-)
-with open(target, 'w') as f:
-    f.write(c)
-PATCHGLEE
-          echo "Patched gleepack gh_get for GITHUB_TOKEN auth"
+        run: sh scripts/patch-gleepack.sh
 
       - name: Build all targets with gleepack
         run: gleam run -m gleepack build
